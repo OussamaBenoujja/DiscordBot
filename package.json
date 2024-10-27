@@ -1,0 +1,22 @@
+{
+  "name": "discordbot",
+  "version": "1.0.0",
+  "description": "this is a program for a discord Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OussamaBenoujja/DiscordBot.git"
+  },
+  "author": "OussamaBenoujja",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OussamaBenoujja/DiscordBot/issues"
+  },
+  "homepage": "https://github.com/OussamaBenoujja/DiscordBot#readme",
+  "dependencies": {
+    "discord.js": "^14.16.3"
+  }
+}
