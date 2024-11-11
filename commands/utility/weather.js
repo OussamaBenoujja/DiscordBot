@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const https = require('https');
+require('dotenv').config(); // Load environment variables from .env
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -11,8 +12,14 @@ module.exports = {
 				.setRequired(true)),
 	async execute(interaction) {
 		const city = interaction.options.getString('city');
-		const apiKey = 'YOUR_OPENWEATHER_API_KEY'; // Replace with your OpenWeather API key
-		const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+		const apiKey = process.env.WEATHERAPI_KEY; // Fetch the API key from environment variables
+
+		if (!apiKey) {
+			await interaction.reply('API key is missing. Please set it in the .env file.');
+			return;
+		}
+
+		const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`;
 
 		https.get(url, (response) => {
 			let data = '';
@@ -26,13 +33,13 @@ module.exports = {
 			response.on('end', async () => {
 				const weatherData = JSON.parse(data);
 
-				if (weatherData.cod !== 200) {
+				if (weatherData.error) {
 					await interaction.reply(`Could not find weather data for ${city}.`);
 					return;
 				}
 
-				const weather = weatherData.weather[0].description;
-				const temp = weatherData.main.temp;
+				const weather = weatherData.current.condition.text;
+				const temp = weatherData.current.temp_c;
 
 				await interaction.reply(`The weather in ${city} is currently ${weather} with a temperature of ${temp}°C.`);
 			});
